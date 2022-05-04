@@ -1,12 +1,15 @@
 require('dotenv').config()
 const mongoose = require("mongoose")
 
-CONNECTION_STRING = "mongodb+srv://<username>:<password>@cluster0.qzx1m.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+CONNECTION_STRING = process.env.CONNECTION_STRING
 MONGO_URL =
     CONNECTION_STRING.replace("<username>", process.env.MONGO_USERNAME).replace("<password>", process.env.MONGO_PASSWORD)
 
-mongoose.connect(MONGO_URL)
-
+mongoose.connect(MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    dbName: "ZooY"
+})
 
 const db = mongoose.connection
 
