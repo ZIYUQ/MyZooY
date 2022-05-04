@@ -2,7 +2,6 @@ const express = require("express")
 const userController = require('../controllers/userController')
 
 const userRouter = express.Router()
-const passport = require('passport')
 
 userRouter.post('/login', userController.UserLogin)
 

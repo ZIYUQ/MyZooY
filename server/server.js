@@ -12,7 +12,6 @@ app.use(express.json())
 app.use(bodyParser.json())
 app.use(express.urlencoded({ extended: true }))
 
-const userRouter = require('./routers/userRouter')
 
 app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ limit: '10mb', extended: true })); // replaces body-parser
@@ -40,19 +39,24 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }))
-
 app.use(passport.initialize())
 
 app.use(passport.session())
 
+const userRouter = require('./routers/userRouter')
+const profileRouter = require('./routers/profileRouter')
 
 app.use('/', userRouter)
-process.on('uncaughtException', (e) => {
-    console.error('process error is:', e.message)
-})
+app.use('/profile', profileRouter)
+
 app.get('*', function (req, res) {
     res.status(404).send('what???');
 });
+
+
+process.on('uncaughtException', (e) => {
+    console.error('process error is:', e.message)
+})
 
 const port = process.env.PORT || 8000
 app.listen(port, () => {
