@@ -1,19 +1,14 @@
 import React from 'react';
+import post from '../common/request.js'
+
 
 class HomePage extends React.Component{
     componentDidMount(){
         const req = {
             emailAddress: "ziyuq@student.unimelb.edu.au",
-            password:"12345678"
+            password:"1234578"
         }
-        fetch('http://localhost:8000/login', {
-            method: 'POST',
-            withCredentials: true,
-            body: JSON.stringify({
-                emailAddress: "ziyuq@student.unimelb.edu.au",
-                password:"12345678"
-            })
-        }) .then(resp => {
+        post(req, '/login').then(resp => {
             return resp.json();
         })
         .then(data => {
