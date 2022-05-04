@@ -6,6 +6,7 @@ const db = require("../db").default
 const uploadImage = require("../middleware/uploadImage")
 
 const UserLogin = (req, res, next) => {
+    console.log(req.body)
     passport.authenticate('local-login', (err, user, info) => {
         // If there were errors during executing the strategy or the user was not found, we display and error
         if (err) {
