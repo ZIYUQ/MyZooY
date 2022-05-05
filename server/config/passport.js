@@ -82,26 +82,30 @@ module.exports = function (passport) {
                     console.log(err)
                     return done(err, false, { message: "Database query failed" });
                 } else {
-                    // If the information is not entered, will return with the wrong message
-                    if (emailAddress == "" || emailAddress == null) {
-                        console.log("Please enter your emailAddress")
-                        return done(null, false, { message: "Please enter your emailAddress" });
-                    }
-                    else if (password == "" || password == null) {
-                        return done(null, false, { message: "Please set your password" });
-                    }
                     // If the emailAddress has already been used, send message and return false
-                    else if (existingUser) {
+                    if (existingUser) {
                         console.log("Customer signup failed:", emailAddress, "ALREADY REGISTERED!");
-                        return done(null, false, { message: "emailAddress has already Registered" });
+                        return done(null, false, { message: "Email Address has already Registered" });
                     }
+                    // If the information is not entered, will return with the wrong message
+
                     else {
+                        Mail.send(emailAddress, req.body.userName), (err, data) => {
+                            if (err) {
+                                console.log(err)
+                            }
+                            else {
+                                console.log("success")
+                            }
+                        }
                         // otherwise
                         // create a new user
                         let newUser = new User();
+                        newUser.userName = req.body.userName
                         newUser.emailAddress = emailAddress;
                         newUser.password = newUser.generateHash(password);
-                        newUser.ban = false
+                        newUser.ban = false;
+                        newUser.active = false;
                         // and save the user
                         newUser.save(function (err) {
                             if (err)

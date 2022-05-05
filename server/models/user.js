@@ -5,13 +5,15 @@ const avatarSchema = new mongoose.Schema({
 })
 
 const userSchema = new mongoose.Schema({
+    userName: { type: String, required: true },
     age: { type: Number },
     emailAddress: { type: String, required: true, unique: true },
     gender: { type: String, enum: ["Male", "Female", "Prefer not to say"] },
     location: { city: String, state: String, country: String },
     avatar: avatarSchema,
     password: { type: String, required: true },
-    ban: { type: Boolean, required: true }
+    ban: { type: Boolean, required: true },
+    active: { type: Boolean }
 })
 
 
