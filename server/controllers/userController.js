@@ -4,7 +4,7 @@ require('../config/passport')(passport)
 const jwt = require("jsonwebtoken");
 const db = require("../db").default
 const uploadImage = require("../middleware/uploadImage")
-const Mail = require('../middleware/mail')
+
 const UserLogin = (req, res, next) => {
     passport.authenticate('local-login', (err, user, info) => {
         // If there were errors during executing the strategy or the user was not found, we display and error
@@ -47,6 +47,24 @@ const UserSignup = (req, res, next) => {
     })(req, res, next)
 }
 
+const UserSignUpVerification = async (req, res) => {
+    try {
+        let code = req.body.verificationCode
+        let email = req.body.emailAddress
+
+        const user = await User.findOne({ emailAddress: email }, {})
+        if (user.validCode(code)) {
+            await User.updateOne({ emailAddress: email }, { $set: { active: true } })
+            res.sendStatus(200)
+        } else {
+            res.status(401).json({ error: "Code is not correct" })
+        }
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+
 const AvatarUpload = async (req, res) => {
     try {
         await uploadImage(req, res);
@@ -67,4 +85,4 @@ const AvatarUpload = async (req, res) => {
     }
 };
 
-module.exports = { UserLogin, UserSignup, AvatarUpload }
+module.exports = { UserLogin, UserSignup, AvatarUpload, UserSignUpVerification }

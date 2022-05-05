@@ -8,4 +8,6 @@ userRouter.post('/login', userController.UserLogin)
 userRouter.post('/register', userController.UserSignup)
 
 userRouter.post("/avatar/upload", userController.AvatarUpload)
+
+userRouter.post('/register/verification', userController.UserSignUpVerification)
 module.exports = userRouter

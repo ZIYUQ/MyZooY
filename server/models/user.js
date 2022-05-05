@@ -13,19 +13,24 @@ const userSchema = new mongoose.Schema({
     avatar: avatarSchema,
     password: { type: String, required: true },
     ban: { type: Boolean, required: true },
-    active: { type: Boolean }
+    active: { type: Boolean },
+    code: { type: String }
 })
 
 
 
-userSchema.methods.generateHash = function (password) {
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(10), null);
+userSchema.methods.generateHash = function (word) {
+    return bcrypt.hashSync(word, bcrypt.genSaltSync(10), null);
 };
 
 // checks if password is valid
 userSchema.methods.validPassword = function (password) {
     return bcrypt.compareSync(password, this.password);
 };
+
+userSchema.methods.validCode = function (code) {
+    return bcrypt.compareSync(code, this.code);
+}
 
 const User = mongoose.model("User", userSchema)
 const Avatar = mongoose.model("Avatar", avatarSchema)

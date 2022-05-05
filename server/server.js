@@ -54,9 +54,9 @@ app.get('*', function (req, res) {
 });
 
 
-process.on('uncaughtException', (e) => {
-    console.error('process error is:', e.message)
-})
+// process.on('uncaughtException', (e) => {
+//     console.error('process error is:', e.message)
+// })
 
 const port = process.env.PORT || 8000
 app.listen(port, () => {

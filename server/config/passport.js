@@ -7,6 +7,8 @@ const Moderator = require('../models/moderator')
 const passportJWT = require("passport-jwt");
 const JwtStrategy = passportJWT.Strategy;
 const ExtractJwt = passportJWT.ExtractJwt;
+const Mail = require('../middleware/mail')
+const codeGenerate = require('../util/randomCode')
 
 module.exports = function (passport) {
     passport.serializeUser(function (user, done) {
@@ -51,8 +53,9 @@ module.exports = function (passport) {
                     // does match, send back errors
                     if (err) {
                         return done(err, false, { message: "Database query failed" });
-                    } else if (!user) {
-                        return done(null, false, { message: 'emailAddress not registered' });
+                    } else if (!user || !user.active) {
+
+                        return done(null, false, { message: 'Email Address not registered' });
                     } else if (!user.validPassword(password)) {
                         // false in done() indicates to the strategy that authentication has
                         // failed
@@ -90,14 +93,13 @@ module.exports = function (passport) {
                     // If the information is not entered, will return with the wrong message
 
                     else {
-                        Mail.send(emailAddress, req.body.userName), (err, data) => {
-                            if (err) {
-                                console.log(err)
-                            }
-                            else {
-                                console.log("success")
-                            }
-                        }
+                        let code = codeGenerate.getRandomNumber().toString
+                        console.log(code)
+                        Mail.send(emailAddress, req.body.userName, code)
+                            .then(() => {
+                            }).catch(() => {
+                                console.log(1)
+                            })
                         // otherwise
                         // create a new user
                         let newUser = new User();
@@ -106,6 +108,7 @@ module.exports = function (passport) {
                         newUser.password = newUser.generateHash(password);
                         newUser.ban = false;
                         newUser.active = false;
+                        newUser.code = newUser.generateHash(code);
                         // and save the user
                         newUser.save(function (err) {
                             if (err)
