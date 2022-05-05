@@ -93,7 +93,7 @@ module.exports = function (passport) {
                     // If the information is not entered, will return with the wrong message
 
                     else {
-                        let code = codeGenerate.getRandomNumber().toString
+                        let code = codeGenerate.getRandomNumber().toString()
                         console.log(code)
                         Mail.send(emailAddress, req.body.userName, code)
                             .then(() => {
