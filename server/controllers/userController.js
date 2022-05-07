@@ -56,34 +56,25 @@ const UserSignUpVerification = async (req, res) => {
         const user = await User.findOne({ emailAddress: email }, {})
         if (user.validCode(code)) {
             await User.updateOne({ emailAddress: email }, { $set: { active: true } })
-            res.sendStatus(200)
+            req.login(user, { session: false }, async (error) => {
+                if (error) return next(error);
+                const body = { _id: user._id };
+
+                //Sign the JWT token and populate the payload with the user email
+                const token = jwt.sign({ body }, process.env.JWT_PASSWORD);
+                //Send back the token to the client
+                return res.status(200).json({ data: user, token: token });
+            });
         } else {
-            res.status(401).json({ error: "Code is not correct" })
+            return res.status(401).json({ error: "Code is not correct" })
         }
+
     } catch (err) {
         console.log(err)
     }
 }
 
 
-const AvatarUpload = async (req, res) => {
-    try {
-        await uploadImage(req, res);
-        console.log(req.file);
-        if (req.file == undefined) {
-            return res.send({
-                success: false, message: "You must select a file.",
-            });
-        }
-        return res.send({
-            message: "File has been uploaded.",
-        });
-    } catch (error) {
-        console.log(error);
-        return res.send({
-            message: "Error when trying upload image: ${error}",
-        });
-    }
-};
 
-module.exports = { UserLogin, UserSignup, AvatarUpload, UserSignUpVerification }
+
+module.exports = { UserLogin, UserSignup, UserSignUpVerification }

@@ -13,4 +13,6 @@ profileRouter.post('/update/location',
 profileRouter.post('/update/gender',
     passport.authenticate('jwt', { session: false }), (req, res) => profileController.UpdateGender(req, res))
 
+profileRouter.post('/update/avatar',
+    passport.authenticate('jwt', { session: false }), (req, res) => profileController.UpdateAvatar(req, res))
 module.exports = profileRouter

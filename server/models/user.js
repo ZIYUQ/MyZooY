@@ -1,8 +1,5 @@
 const mongoose = require("mongoose")
 const bcrypt = require('bcrypt')
-const avatarSchema = new mongoose.Schema({
-    img: { data: Buffer, contentType: String }
-})
 
 const userSchema = new mongoose.Schema({
     userName: { type: String, required: true },
@@ -10,7 +7,10 @@ const userSchema = new mongoose.Schema({
     emailAddress: { type: String, required: true, unique: true },
     gender: { type: String, enum: ["Male", "Female", "Prefer not to say"] },
     location: { city: String, state: String, country: String },
-    avatar: avatarSchema,
+    avatar: {
+        data: { type: String, default: undefined },
+        contentType: { type: String, default: "image" }
+    },
     password: { type: String, required: true },
     ban: { type: Boolean, required: true },
     active: { type: Boolean },
@@ -33,6 +33,5 @@ userSchema.methods.validCode = function (code) {
 }
 
 const User = mongoose.model("User", userSchema)
-const Avatar = mongoose.model("Avatar", avatarSchema)
 
-module.exports = User, Avatar
+module.exports = User
