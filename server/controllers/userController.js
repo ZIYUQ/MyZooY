@@ -44,6 +44,7 @@ const UserSignup = (req, res, next) => {
         //     const token = jwt.sign({ body }, process.env.JWT_PASSWORD);
         //     return res.send(200).json({ data: user, token: token });
         // });
+        return res.sendStatus(200)
     })(req, res, next)
 }
 

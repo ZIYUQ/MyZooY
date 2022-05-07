@@ -86,7 +86,7 @@ module.exports = function (passport) {
                     return done(err, false, { message: "Database query failed" });
                 } else {
                     // If the emailAddress has already been used, send message and return false
-                    if (existingUser) {
+                    if (existingUser && existingUser.active) {
                         console.log("Customer signup failed:", emailAddress, "ALREADY REGISTERED!");
                         return done(null, false, { message: "Email Address has already Registered" });
                     }
