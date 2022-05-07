@@ -90,9 +90,18 @@ module.exports = function (passport) {
                         console.log("Customer signup failed:", emailAddress, "ALREADY REGISTERED!");
                         return done(null, false, { message: "Email Address has already Registered" });
                     }
+
                     // If the information is not entered, will return with the wrong message
 
                     else {
+                        if (existingUser && !existingUser.active) {
+                            User.deleteOne({ 'emailAddress': emailAddress }, function (err) {
+                                if (err) {
+                                    console.log(err)
+                                    return done(err, false, { message: "Database query failed" });
+                                }
+                            })
+                        }
                         let code = codeGenerate.getRandomNumber().toString()
                         console.log(code)
                         Mail.send(emailAddress, req.body.userName, code)
@@ -102,6 +111,7 @@ module.exports = function (passport) {
                             })
                         // otherwise
                         // create a new user
+
                         let newUser = new User();
                         newUser.userName = req.body.userName
                         newUser.emailAddress = emailAddress;
@@ -115,6 +125,7 @@ module.exports = function (passport) {
                                 throw err;
                             return done(null, newUser);
                         })
+
                     }
                 }
             })
