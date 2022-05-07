@@ -1,0 +1,16 @@
+.menuSelected {
+    text-align: center;
+    line-height: 128px;
+    font-weight: 600;
+    font-size: 1.5vh;
+    font-family: Ubuntu;
+    color: rgb(184, 188, 200);
+}
+
+.menuNotSelected {
+    text-align: center;
+    line-height: 128px;
+    font-size: 1.5vh;
+    font-family: Ubuntu;
+    color: rgb(184, 188, 200);
+}

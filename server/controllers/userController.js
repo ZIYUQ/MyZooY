@@ -26,6 +26,7 @@ const UserLogin = (req, res, next) => {
 }
 
 const UserSignup = (req, res, next) => {
+    console.log(req.body)
     passport.authenticate('local-signup', (err, user, info) => {
         if (err) {
             return res.status(500).json({ error: info.message })
@@ -44,7 +45,7 @@ const UserSignup = (req, res, next) => {
         //     const token = jwt.sign({ body }, process.env.JWT_PASSWORD);
         //     return res.send(200).json({ data: user, token: token });
         // });
-        return res.sendStatus(200)
+        return res.status(200).json({ data: 'SUCCESSS' })
     })(req, res, next)
 }
 
