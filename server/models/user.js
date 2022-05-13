@@ -12,9 +12,9 @@ const userSchema = new mongoose.Schema({
         contentType: { type: String, default: "image" }
     },
     password: { type: String, required: true },
-    ban: { type: Boolean, required: true },
-    active: { type: Boolean },
-    code: { type: String }
+    ban: { type: Boolean, required: true }, // Check whether it is banned by moderator
+    active: { type: Boolean }, // Can only use the account if it is active
+    code: { type: String } // for email verification 
 })
 
 

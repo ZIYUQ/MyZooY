@@ -2,7 +2,6 @@ const User = require('../models/user');
 const passport = require("passport");
 require('../config/passport')(passport)
 const jwt = require("jsonwebtoken");
-const db = require("../db").default
 const uploadImage = require("../middleware/uploadImage")
 
 const UserLogin = (req, res, next) => {
