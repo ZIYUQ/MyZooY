@@ -119,6 +119,9 @@ module.exports = function (passport) {
                         newUser.ban = false;
                         newUser.active = false;
                         newUser.code = newUser.generateHash(code);
+                        newUser.age = 0;
+                        newUser.location = "";
+                        newUser.gender = "";
                         // and save the user
                         newUser.save(function (err) {
                             if (err)

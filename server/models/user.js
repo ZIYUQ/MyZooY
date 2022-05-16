@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
     age: { type: Number },
     emailAddress: { type: String, required: true, unique: true },
     gender: { type: String, enum: ["Male", "Female", "Prefer not to say"] },
-    location: { city: String, state: String, country: String },
+    location: { type: String },
     avatar: {
         data: { type: String, default: undefined },
         contentType: { type: String, default: "image" }
