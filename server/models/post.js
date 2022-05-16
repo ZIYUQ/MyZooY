@@ -2,7 +2,7 @@ const mongoose = require("mongoose")
 const postSchema = new mongoose.Schema({
     allowed: { type: Boolean },
     userID: { type: mongoose.Types.ObjectId, required: true, ref: "User" },
-    comment: [{ type: mongoose.Types.ObjectId, required: true, ref: "commentPost" }],
+    comments: [{ type: mongoose.Types.ObjectId, required: true, ref: "commentPost" }],
     content: { type: String, maxlength: 250 },
     title: { type: String },
     like: { type: Number, default: 0 },
