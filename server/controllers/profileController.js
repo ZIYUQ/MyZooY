@@ -1,4 +1,3 @@
-
 const User = require('../models/user');
 
 const UpdateAge = async (req, res) => {
@@ -30,6 +29,7 @@ const UpdateGender = async (req, res) => {
         return res.status(400).json({ error: "Bad Request" })
     }
 }
+
 const UpdateAvatar = async (req, res) => {
     try {
         let photo = {
