@@ -43,4 +43,18 @@ const UpdateAvatar = async (req, res) => {
     }
 }
 
-module.exports = { UpdateAge, UpdateGender, UpdateLocation, UpdateAvatar }
+const UpdateAll = async (req, res) => {
+    try {
+        let userID = req.user._id
+        let photo = {
+            data: req.body.avatar,
+            contentType: "image"
+        }
+        await User.updateOne({ _id: userID }, { $set: { gender: req.body.gender, avatar: photo, location: req.body.location, age: req.body.age } })
+        return res.status(200).json({ data: "Success" })
+    } catch (err) {
+        return res.status(400).json({ success: false, error: "upload image error, failed" })
+    }
+}
+
+module.exports = { UpdateAge, UpdateGender, UpdateLocation, UpdateAvatar, UpdateAll }

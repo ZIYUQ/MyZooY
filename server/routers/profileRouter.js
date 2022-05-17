@@ -15,4 +15,7 @@ profileRouter.post('/update/gender',
 
 profileRouter.post('/update/avatar',
     passport.authenticate('jwt', { session: false }), (req, res) => profileController.UpdateAvatar(req, res))
+
+profileRouter.post('/update/all',
+    passport.authenticate('jwt', { session: false }), (req, res) => profileController.UpdateAll(req, res))
 module.exports = profileRouter
