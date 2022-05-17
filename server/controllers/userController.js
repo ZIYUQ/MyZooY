@@ -70,11 +70,19 @@ const UserSignUpVerification = async (req, res) => {
         }
 
     } catch (err) {
-        console.log(err)
+        return res.status(400).json({ error: "Bad Request" })
+    }
+}
+
+const UserInfo = async (req, res) => {
+    try {
+        let user = await User.findOne({ _id: req.user._id }, {})
+        return res.status(200).json({ data: "success", user: user })
+    } catch (err) {
+        return res.status(400).json({ error: "Bad Request" })
     }
 }
 
 
 
-
-module.exports = { UserLogin, UserSignup, UserSignUpVerification }
+module.exports = { UserLogin, UserSignup, UserSignUpVerification, UserInfo }
