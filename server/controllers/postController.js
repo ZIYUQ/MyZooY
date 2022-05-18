@@ -3,24 +3,18 @@ const { CommentPost } = require('../models/post')
 
 const AllPost = async (req, res) => {
     try {
-        let allPost = await Post.find({});
-
+        let allPost = await Post.find({}).populate("userID");
         return res.status(200).json({ data: "Success", posts: allPost })
     } catch (err) {
+        console.log(err)
         return res.status(400).json({ error: "Bad Request" })
     }
 }
 
 const SinglePost = async (req, res) => {
     try {
-        let commentArray = new Array()
-        let singlePost = await Post.findOne({ _id: req.query.postid });
-        console.log(singlePost)
-        for (i = 0; i < singlePost.comments.length; i++) {
-            let commentPost = await CommentPost.findOne({ _id: singlePost.comments[i] })
-            commentArray.push(commentPost)
-        }
-        return res.status(200).json({ data: "Success", post: singlePost, comments: commentArray })
+        let singlePost = await Post.findOne({ _id: req.query.postid }).populate("comments").populate("userID");
+        return res.status(200).json({ data: "Success", post: singlePost })
 
     } catch (err) {
         console.log(err)
