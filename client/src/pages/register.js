@@ -4,14 +4,9 @@ import '../css/App.css'
 import RegisterContent from '../component/registerContent.js'
 
 export default class Register extends React.Component{
-    constructor(props){
-        super(props);
-    }
 
 
     render(){
-    
-
         return (
             <Layout style={{background: "linear-gradient(135deg, rgb(170 239 198) 10%, rgb(124 148 233) 100%)", minHeight:'100vh'}}>
                 <Row justify='center' aligh='middle' style={{height:'100vh'}}>

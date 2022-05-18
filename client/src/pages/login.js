@@ -1,12 +1,13 @@
 import React from 'react';
-import post from '../common/request.js'
+import Post from '../common/request.js'
 import Cookie from 'js-cookie'
 import { Link } from "react-router-dom";
 import {Row, Col, Layout, Input, Button, message} from 'antd';
+import {useNavigate} from 'react-router-dom'
 import '../css/App.css'
 import { MailOutlined, KeyOutlined, LoginOutlined} from '@ant-design/icons';
 
-export default class Login extends React.Component{
+class LoginPage extends React.Component{
     constructor(props){
         super(props);
         this.state = {emailAddress: undefined, password: undefined}
@@ -18,10 +19,10 @@ export default class Login extends React.Component{
                 emailAddress: this.state.emailAddress,
                 password: this.state.password,
             }
-            post(req, '/login')
+            Post(req, '/login')
             .then(data => {
                 Cookie.set('token', data.token, { expires: 1 })
-                
+                this.props.navigation('/profile')
             })
             .catch(error => message.error(error.message))
         }
@@ -63,4 +64,9 @@ export default class Login extends React.Component{
             </Layout>
         )
     }
+}
+
+// Wrap and export
+export default function LoginContent(props) {  
+    return <LoginPage {...props} navigation={useNavigate()} />;
 }
