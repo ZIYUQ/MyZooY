@@ -42,10 +42,11 @@ app.use(passport.session())
 
 const userRouter = require('./routers/userRouter')
 const profileRouter = require('./routers/profileRouter')
+const postRouter = require('./routers/postRouter')
 
 app.use('/', userRouter)
 app.use('/profile', profileRouter)
-
+app.use('/post', postRouter)
 app.get('*', function (req, res) {
     res.status(404).send('what???');
 });
