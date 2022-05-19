@@ -21,7 +21,7 @@ const SinglePost = async (req, res) => {
             let comment = await CommentPost.findOne({ _id: commentList[i].userID }).populate("userID");
             comments.push(comment)
         }
-        return res.status(200).json({ data: "Success", post: singlePost })
+        return res.status(200).json({ data: "Success", post: singlePost, comments: comments })
 
     } catch (err) {
         console.log(err)
