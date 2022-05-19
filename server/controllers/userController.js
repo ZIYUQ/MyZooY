@@ -25,7 +25,6 @@ const UserLogin = (req, res, next) => {
 }
 
 const UserSignup = (req, res, next) => {
-    console.log(req.body)
     passport.authenticate('local-signup', (err, user, info) => {
         if (err) {
             return res.status(500).json({ error: info.message })
@@ -76,7 +75,7 @@ const UserSignUpVerification = async (req, res) => {
 
 const UserInfo = async (req, res) => {
     try {
-        let user = await User.findOne({ _id: req.user._id }, {})
+        let user = await User.findOne({ _id: req.user._id }, {}).populate("posts")
         return res.status(200).json({ data: "success", user: user })
     } catch (err) {
         return res.status(400).json({ error: "Bad Request" })

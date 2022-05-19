@@ -1,9 +1,10 @@
 const { Post } = require('../models/post')
-const { CommentPost } = require('../models/post')
+const { CommentPost } = require('../models/post');
+const User = require('../models/user');
 
 const AllPost = async (req, res) => {
     try {
-        let allPost = await Post.find({}).populate("userID");
+        let allPost = await Post.find({}).populate("userID").sort({ updatedAt: -1 });
         return res.status(200).json({ data: "Success", posts: allPost })
     } catch (err) {
         console.log(err)
@@ -13,7 +14,13 @@ const AllPost = async (req, res) => {
 
 const SinglePost = async (req, res) => {
     try {
-        let singlePost = await Post.findOne({ _id: req.query.postid }).populate("comments").populate("userID");
+        let singlePost = await Post.findOne({ _id: req.query.postid }).populate("userID");
+        let commentList = Array.reverse(singlePost.comments);
+        let comments = new Array();
+        for (i = 0; i < commentList.length; i++) {
+            let comment = await CommentPost.findOne({ _id: commentList[i].userID }).populate("userID");
+            comments.push(comment)
+        }
         return res.status(200).json({ data: "Success", post: singlePost })
 
     } catch (err) {
