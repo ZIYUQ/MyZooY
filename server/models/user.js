@@ -15,8 +15,8 @@ const userSchema = new mongoose.Schema({
     ban: { type: Boolean, required: true }, // Check whether it is banned by moderator
     active: { type: Boolean }, // Can only use the account if it is active
     code: { type: String },
-    posts: [{ type: mongoose.Types.ObjectId, ref: "post" }],
-    likes: [{ type: mongoose.Types.ObjectId, ref: "commentPost" }] // for email verification
+    posts: [{ type: mongoose.Types.ObjectId, ref: "Post" }],
+    likes: [{ type: mongoose.Types.ObjectId, ref: "CommentPost" }] // for email verification
 })
 
 
