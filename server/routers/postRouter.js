@@ -6,7 +6,7 @@ const postRouter = express.Router()
 postRouter.post('/create',
     passport.authenticate('jwt', { session: false }), (req, res) => postController.NewPost(req, res))
 
-postRouter.post('/comment',
+postRouter.post('/comment?',
     passport.authenticate('jwt', { session: false }), (req, res) => postController.Comment(req, res))
 
 //localhost:8000/post/select?postid={{post id value}}

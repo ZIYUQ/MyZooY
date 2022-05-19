@@ -15,7 +15,7 @@ const AllPost = async (req, res) => {
 const SinglePost = async (req, res) => {
     try {
         let singlePost = await Post.findOne({ _id: req.query.postid }).populate("userID");
-        let commentList = Array.reverse(singlePost.comments);
+        let commentList = singlePost.comments.reverse();
         let comments = new Array();
         for (i = 0; i < commentList.length; i++) {
             let comment = await CommentPost.findOne({ _id: commentList[i].userID }).populate("userID");
@@ -52,7 +52,7 @@ const Comment = async (req, res) => {
         newPost.content = req.body.content
         newPost.userID = req.user._id
         let commentPost = await newPost.save()
-        await Post.updateOne({ _id: req.body.postID }, { $push: { comments: commentPost._id } })
+        await Post.updateOne({ _id: req.query.postid }, { $push: { comments: commentPost._id } })
         return res.status(200).json({ data: "Success" })
 
     } catch (err) {
