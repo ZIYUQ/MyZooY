@@ -9,7 +9,7 @@ import {useNavigate, useLocation } from 'react-router-dom'
 class PostDetailPage extends React.Component{
     constructor(props){
         super(props);
-        this.state={loading: true, user: undefined, post: undefined}
+        this.state={loading: true, user: undefined, post: undefined, comments: undefined}
     }
 
     componentDidMount() {
@@ -27,6 +27,7 @@ class PostDetailPage extends React.Component{
         Get('/post/select?postid=' + id)
         .then(data => {
             this.setState({post: data.post})
+            this.setState({comments: data.comments})
         })
         .catch(error => {
             this.setState({loading: false})
@@ -37,8 +38,13 @@ class PostDetailPage extends React.Component{
         const navigation = this.props.navigation
         const {Title} = Typography
 
-        const sendData = (post) => {
-            this.setState({post: post})
+        const sendData = (data) => {
+            this.setState({post: data.post})
+            this.setState({comments: data.comments})
+        }
+
+        const sendUser = (user) => {
+            this.setState({user: user})
         }
     
 
@@ -68,7 +74,9 @@ class PostDetailPage extends React.Component{
                             <div>
                                <DetailContent post={this.state.post} navigation={navigation} 
                                 user={this.state.user}
-                                sendData={sendData}></DetailContent>
+                                sendData={sendData}
+                                sendUser={sendUser}
+                                comments={this.state.comments}></DetailContent>
                             </div>
                         </Col>
                         <div>

@@ -3,15 +3,18 @@ import {Spin, Divider, List, Row, Col, Typography, Input, Button, message} from 
 import '../css/App.css'
 import PFP from './pfp.js'
 import CommentDetial from './commentFormat.js';
-import {CommentOutlined} from '@ant-design/icons'
+import {CommentOutlined, HeartTwoTone, MessageTwoTone} from '@ant-design/icons'
 import Post, {Get} from '../common/request.js'
 
 export default function DetialContent(props){
     const post = props.post
-    console.log(post)
+    const comments = props.comments
+    const user = props.user
+
     const {Title, Text, Paragraph} = Typography;
-    const [writeComment, setWriteComment] = useState(undefined);
-    const [loading, setLoading] = useState(false)
+    const [writeComment, setWriteComment] = useState('');
+    const [commentloading, setCommentLoading] = useState(false)
+    const [likeloading, setLikeLoading] = useState(false)
     const {TextArea} = Input
     if (post ===undefined){
         return (
@@ -21,7 +24,7 @@ export default function DetialContent(props){
         )
     }
     const sendData = props.sendData
-    
+    const sendUser = props.sendUser
     const avatar = post.userID.avatar.data
     const userName = post.userID.userName
     const date = new Date(post.updatedAt)
@@ -31,10 +34,65 @@ export default function DetialContent(props){
     const title = post.title
     const content = post.content
     const postID = post._id
-    const comment = post.comments
+    const likeNum = post.like
+    const commentNum = post.comments.length
+
+    const toLike = () => {
+        setLikeLoading(true)
+        if (user !== undefined){
+            if (ifLike()){
+                Get('/post/cancel_like?postid=' + postID)
+                .then(data => {
+                    var post_c = {...post}
+                    post_c.like = post_c.like - 1
+                    var user_c = {...user}
+                    var likes = user.likes
+                    likes.splice(likes.indexOf(postID), 1)
+                    user_c.likes = likes
+                    sendUser(user_c)
+                    sendData({post: post_c, comments: comments})
+                    setLikeLoading(false)
+                }).catch(err =>message.error(err))
+            }
+            else{
+                Get('/post/like_post?postid=' + postID)
+                .then(data => {
+                    var post_c = {...post}
+                    post_c.like = post_c.like + 1
+                    var user_c = {...user}
+                    var likes = user.likes
+                    likes.push(postID)
+                    user_c.likes = likes
+                    sendUser(user_c)
+                    sendData({post: post_c, comments: comments})
+                    setLikeLoading(false)
+                }).catch(err =>message.error(err))
+            }
+        }
+        else {
+            message.error('Please Login')
+            setLikeLoading(false)
+        }
+    }
+
+    const ifLike= () => {
+        if (user.likes.includes(postID) || user === undefined){
+            return true
+        }
+
+        return false
+    }
+
+    const likeColor = () => {
+        if (ifLike()){
+            return "#eb2f96"
+        }
+        return 'rgb(171 168 168)'
+    }
+
 
     const toComment = () => {
-        setLoading(true)
+        setCommentLoading(true)
         const req = {
             content: writeComment
         }
@@ -43,9 +101,10 @@ export default function DetialContent(props){
             console.log(data)
             Get('/post/select?postid=' + postID)
             .then(data => {
-                sendData(data.post)
+                setWriteComment('')
+                sendData(data)
                 message.success('Successfully Comment')
-                setLoading(false)
+                setCommentLoading(false)
             })
             .catch(error => {
                 
@@ -63,10 +122,10 @@ export default function DetialContent(props){
                     </Col>
                     <Col offset={1} span={20}>
                         <TextArea autoSize={true} placeholder="Comment" bordered={false} style={{width: '100%'}} 
-                            onChange={e=>setWriteComment(e.target.value)}/>
+                            onChange={e=>setWriteComment(e.target.value)} value={writeComment}/>
                         <Divider style={{width: '100%', margin: '0 0', paddingTop: '20px'}}></Divider>
                         <Button shape='round' icon={<CommentOutlined />} type='primary'
-                        onClick={e => toComment()} loading={loading}>
+                        onClick={e => toComment()} loading={commentloading}>
                             Write Comment
                         </Button>
                     </Col>
@@ -94,12 +153,31 @@ export default function DetialContent(props){
                     </Paragraph>
                 </Col>
             </Row>
+            <Row style={{width: '100%', paddingBottom: '4px'}} justify="space-evenly" align="middle">
+                <Col>
+                    <span>
+                        <Button shape='circle' icon={<HeartTwoTone twoToneColor={likeColor()}/>} type='text' 
+                        onClick={e=>toLike(e)} loading={likeloading}/>
+                    </span>
+                    <Text type='secondary' style={{marginLeft: '10px'}}>
+                        {likeNum}
+                    </Text>
+                </Col>
+                <Col>
+                    <span>
+                        <Button shape='circle' icon={<MessageTwoTone twoToneColor={'rgb(171 168 168)'}/>} type='text'/>
+                    </span>
+                    <Text type='secondary' style={{marginLeft: '10px'}}>
+                        {commentNum}
+                    </Text>
+                </Col>
+            </Row>
             <Divider style={{width: '100%', margin: '0 0', paddingTop: '20px'}}></Divider>
             {commentPart()}
-            <Divider style={{width: '100%', margin: '0 0', paddingTop: '20px'}}></Divider>
+            <Divider style={{width: '100%', margin: '0 0'}} orientation='left' children='Comment'></Divider>
             <List
                 itemLayout="horizontal"
-                dataSource={comment}
+                dataSource={comments}
                 locale={{emptyText: 'No Comments Now'}}
                 renderItem={item => (
                     <div>
