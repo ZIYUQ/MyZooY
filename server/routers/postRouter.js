@@ -20,4 +20,6 @@ postRouter.get('/like_post?',
 postRouter.get('/like_comment?',
     passport.authenticate('jwt', { session: false }), (req, res) => postController.LikeCommentPost(req, res))
 
+postRouter.get('/cancel_like?',
+    passport.authenticate('jwt', { session: false }), (req, res) => postController.CancelLike(req, res))
 module.exports = postRouter

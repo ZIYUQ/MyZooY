@@ -64,6 +64,18 @@ const LikePost = async (req, res) => {
     try {
         let postID = req.query.postid;
         await Post.updateOne({ _id: postID }, { $inc: { like: 1 } })
+        await User.updateOne({ _id: req.user._id }, { $push: { likes: postID } })
+        return res.status(200).json({ data: "Success" })
+    } catch (err) {
+        return res.status(400).json({ error: "Bad Request" })
+    }
+}
+
+const CancelLike = async (req, res) => {
+    try {
+        let postID = req.query.postid;
+        await Post.updateOne({ _id: postID }, { $inc: { like: -1 } })
+        await User.updateOne({ _id: req.user._id }, { $pull: { likes: postID } })
         return res.status(200).json({ data: "Success" })
     } catch (err) {
         return res.status(400).json({ error: "Bad Request" })
@@ -74,6 +86,7 @@ const LikeCommentPost = async (req, res) => {
     try {
         let postID = req.query.postid;
         await CommentPost.updateOne({ _id: postID }, { $inc: { like: 1 } })
+        await User.updateOne({ _id: req.user._id }, { push: { postID } })
         return res.status(200).json({ data: "Success" })
     } catch (err) {
         return res.status(400).json({ error: "Bad Request" })
@@ -81,4 +94,4 @@ const LikeCommentPost = async (req, res) => {
 }
 
 
-module.exports = { AllPost, NewPost, Comment, SinglePost, LikePost, LikeCommentPost }
+module.exports = { AllPost, NewPost, Comment, SinglePost, LikePost, LikeCommentPost, CancelLike }

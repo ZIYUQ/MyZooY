@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
     active: { type: Boolean }, // Can only use the account if it is active
     code: { type: String },
     posts: [{ type: mongoose.Types.ObjectId, ref: "Post" }],
-    likes: [{ type: mongoose.Types.ObjectId, ref: "CommentPost" }] // for email verification
+    likes: [{ type: mongoose.Types.ObjectId, ref: "Post" }] // for email verification
 })
 
 

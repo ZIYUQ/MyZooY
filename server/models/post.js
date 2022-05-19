@@ -14,7 +14,7 @@ const postSchema = new mongoose.Schema({
     comments: [{ type: mongoose.Types.ObjectId, required: true, ref: "CommentPost" }],
     content: { type: String, maxlength: 250 },
     title: { type: String },
-    like: { type: Number, default: 0 },
+    like: { type: Number, default: 0, min: 0 },
     rejected: { type: Boolean }
 }, { timestamps: true })
 
