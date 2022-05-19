@@ -18,7 +18,7 @@ const SinglePost = async (req, res) => {
         let commentList = singlePost.comments.reverse();
         let comments = new Array();
         for (i = 0; i < commentList.length; i++) {
-            let comment = await CommentPost.findOne({ _id: commentList[i].userID }).populate("userID");
+            let comment = await CommentPost.findOne({ _id: commentList[i] }).populate("userID");
             comments.push(comment)
         }
         return res.status(200).json({ data: "Success", post: singlePost, comments: comments })
