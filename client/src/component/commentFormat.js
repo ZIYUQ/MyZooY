@@ -19,33 +19,10 @@ export default function CommentDetial(props){
     const content = data.content
     const postID = data._id
 
-    const getSelected = () => {
-        if (window.getSelection) {
-            return window.getSelection().toString();
-        } else if (document.getSelection) {
-            return document.getSelection().toString();
-        } else {
-            var selection = document.selection && document.selection.createRange();
-            if (selection.text) {
-                return selection.text.toString();
-            }
-            return "";
-        }
-    }
-
-    const toPost = () => {
-        if (getSelected()){
-            
-        }
-        else{
-            props.navigation('/detail?id=' + postID)
-        }
-    }
-
     return(
 
         <Button style={{height: 'auto', width: '100%', paddingTop: '15px', paddingLeft: '25px', 
-            textAlign: 'left', whiteSpace: 'pre-wrap', userSelect: 'text'}} onClick={e => toPost()}
+            textAlign: 'left', whiteSpace: 'pre-wrap', userSelect: 'text'}}
             type="text">
             <Row style={{width: '100%'}}>
                 <Col>

@@ -8,6 +8,7 @@ import Post, {Get} from '../common/request.js'
 
 export default function DetialContent(props){
     const post = props.post
+    console.log(post)
     const {Title, Text, Paragraph} = Typography;
     const [writeComment, setWriteComment] = useState(undefined);
     const [loading, setLoading] = useState(false)
@@ -37,7 +38,7 @@ export default function DetialContent(props){
         const req = {
             content: writeComment
         }
-        Post(req, '/comment?postid=' + postID)
+        Post(req, '/post/comment?postid=' + postID)
         .then(data =>{
             console.log(data)
             Get('/post/select?postid=' + postID)
