@@ -1,36 +1,46 @@
 import React from 'react';
 import {Row, Col, Layout, Divider, Space, Spin, message, Typography} from 'antd';
 import MenuBar from '../component/menubar.js'
-import ProfileContent from '../component/profileContent.js'
+import DetailContent from '../component/detailContent.js'
 import '../css/App.css'
 import {Get} from '../common/request.js'
-import {useNavigate} from 'react-router-dom'
+import {useNavigate, useLocation } from 'react-router-dom'
 
-class ProfilePage extends React.Component{
+class PostDetailPage extends React.Component{
     constructor(props){
         super(props);
-        this.state={loading: true, user: undefined}
+        this.state={loading: true, user: undefined, post: undefined}
     }
 
     componentDidMount() {
+        const id = this.props.postID
         Get('/getuserinfo')
         .then(data => {
+            console.log(data)
             this.setState({user: data.user})
             this.setState({loading: false})
-            console.log(this.state.user)
         })
         .catch(error => {
-            message.error(error.message)
-            this.prop.navigation('/')
+            this.setState({loading: false})
+        })
+
+        Get('/post/select?postid=' + id)
+        .then(data => {
+            this.setState({post: data.post})
+        })
+        .catch(error => {
+            this.setState({loading: false})
         })
     }
 
     render(){
         const navigation = this.props.navigation
         const {Title} = Typography
-        const changeUserInfo =(newUser)=>{
-            this.setState({user: newUser})
+
+        const sendData = (post) => {
+            this.setState({post: post})
         }
+    
 
         if (this.state.loading) {
             return <Space size='middle' style={{ position: 'relative', marginLeft: '50vw', marginTop: '50vh' }}>
@@ -44,7 +54,7 @@ class ProfilePage extends React.Component{
                     <Row style ={{minheight:'100vh'}}>
                         <Col span={3}>
                         </Col>
-                        <Col span={5}>
+                        <Col span={5} style={{height: '100vh'}}>
                             <MenuBar user={this.state.user} navigation={this.props.navigation}></MenuBar>
                         </Col>
                         <div>
@@ -52,14 +62,13 @@ class ProfilePage extends React.Component{
                         </div>
                         <Col span={10}>
                             <div style={{height: '50px', width: '100%', padding: '10px 15px'}}>
-                                <Title level={3} style={{marginBottom: '0'}}>Profile</Title>
+                                <Title level={3} style={{marginBottom: '0'}}>Detail</Title>
                             </div>
                             <Divider style={{width: '100%', margin:'0 0'}}/>
-                            <div style={{minHeight: '90vh'}}>
-                                <ProfileContent data={this.state.user} 
-                                    navigation={navigation}
-                                    changeUserInfo ={changeUserInfo}></ProfileContent>
-                                <Divider style={{width: '100%'}}></Divider>
+                            <div>
+                               <DetailContent post={this.state.post} navigation={navigation} 
+                                user={this.state.user}
+                                sendData={sendData}></DetailContent>
                             </div>
                         </Col>
                         <div>
@@ -73,6 +82,15 @@ class ProfilePage extends React.Component{
 }
 
 // Wrap and export
-export default function Profile(props) {  
-    return <ProfilePage {...props} navigation={useNavigate()} />;
+export default function PostDetail(props) {
+    
+    const location = useLocation()
+    
+    const GetQueryString = (name) => {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return  unescape(r[2]); return null;
+    }
+        
+    return <PostDetailPage {...props} navigation={useNavigate()} postID={GetQueryString('id')}/>;
 }

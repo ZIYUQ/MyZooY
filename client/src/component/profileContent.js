@@ -60,6 +60,7 @@ export default function ProfileContent(props){
             age: age,
             gender: gender
         }
+        console.log(req)
         Post(req, '/profile/update/all')
         .then(data => {
             const user_c = {...user}
@@ -154,7 +155,7 @@ export default function ProfileContent(props){
                             <div style={{width: '80%', height: '50px', margin: '3% 10%'}}> 
                                 <Row>
                                     <InputNumber size="large" addonBefore={<Title level={5}>Age:</Title>} defaultValue={age} min={1} max={120}
-                                        onChange={e => setAge(e.target.value)}/>
+                                        onChange={e => setAge(e)}/>
                                 </Row>
                             </div>
 

@@ -1,33 +1,28 @@
-import React, { useState } from 'react';
-import {Row, Col, Input, Space, Radio,
-    Typography, Button, Modal, message, Divider, List} from 'antd';
+import React from 'react';
+import {Spin, Divider, List} from 'antd';
 import '../css/App.css'
-import PFP from './pfp.js'
-import { EditOutlined, UploadOutlined, } from '@ant-design/icons';
-import { GrLocation } from "react-icons/gr";
-import Post from '../common/request.js'
+
 import PostFormat from './postFormat.js';
 
 
 export default function ProfileContent(props){
-   
-    const data = [{userName: '111', updateAt: '111', avatar: undefined, title: 'Title', content: '1111111'},
-    {userName: '111', updateAt: '111', avatar: undefined, title: 'Title', content: '1111111'},
-    {userName: '111', updateAt: '111', avatar: undefined, title: 'Title', content: '1111111'},
-    {userName: '111', updateAt: '111', avatar: undefined, title: 'Title', content: '1111111'},
-    {userName: '111', updateAt: '111', avatar: undefined, title: 'Title', content: '1111111'},
-    {userName: '111', updateAt: '111', avatar: undefined, title: 'Title', content: '1111111'},
-    {userName: '111', updateAt: '111', avatar: undefined, title: 'Title', content: '1111111'},
-    {userName: '111', updateAt: '111', avatar: undefined, title: 'Title', content: '1111111'}]
-    
+    const posts = props.posts
+    if (posts===undefined){
+        return (
+            <div style={{margin: '45vh auto 0 auto', verticalAlign: 'middle', width: '45px'}}>
+                <Spin size="large" />
+            </div>
+        )
+    }
+
     return(
         <div>
              <List
                 itemLayout="horizontal"
-                dataSource={data}
+                dataSource={posts}
                 renderItem={item => (
                     <div>
-                        <PostFormat data={item}>
+                        <PostFormat data={item} navigation={props.navigation}>
                         </PostFormat>
                         <Divider style={{width: '100%', margin: '0 0'}}></Divider>
                     </div>

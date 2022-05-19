@@ -9,7 +9,7 @@ import {useNavigate} from 'react-router-dom'
 class PostPage extends React.Component{
     constructor(props){
         super(props);
-        this.state={loading: true, user: undefined}
+        this.state={loading: true, user: undefined, posts: undefined}
     }
 
     componentDidMount() {
@@ -21,19 +21,23 @@ class PostPage extends React.Component{
         .catch(error => {
             this.setState({loading: false})
         })
+
+        Get('/post')
+        .then(data => {
+            this.setState({posts: data.posts})
+        })
+        .catch(error => {
+            console.log(error)
+        })
     }
 
     render(){
         const navigation = this.props.navigation
         const {Title} = Typography
-        const changeUserInfo =(newUser)=>{
-            this.setState({user: newUser})
-        }
 
         if (this.state.loading) {
             return <Space size='middle' style={{ position: 'relative', marginLeft: '50vw', marginTop: '50vh' }}>
-                <Spin size='large' />
-                <h3>Loading</h3>
+                <Spin size='large' tip="Loading..."/>
             </Space>;
         }
 
@@ -43,7 +47,7 @@ class PostPage extends React.Component{
                     <Row style ={{minheight:'100vh'}}>
                         <Col span={3}>
                         </Col>
-                        <Col span={4} style={{height: '100vh'}}>
+                        <Col span={5} style={{height: '100vh'}}>
                             <MenuBar user={this.state.user} navigation={this.props.navigation}></MenuBar>
                         </Col>
                         <div>
@@ -55,7 +59,7 @@ class PostPage extends React.Component{
                             </div>
                             <Divider style={{width: '100%', margin:'0 0'}}/>
                             <div>
-                               <PostContent></PostContent>
+                               <PostContent posts={this.state.posts} navigation={navigation}></PostContent>
                             </div>
                         </Col>
                         <div>
