@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
-import {Row, Col, Typography, Button, message} from 'antd';
+import {Row, Col, Typography, Button, message, Alert} from 'antd';
 import '../css/App.css'
 import {HeartTwoTone, MessageTwoTone} from '@ant-design/icons'
 import PFP from './pfp.js'
+import { Get } from '../common/request';
 
 
 
 export default function PostFormat(props){
     const {Title, Text, Paragraph } = Typography
+    const [likeLoading, setLikeLoading] = useState(false)
+    const sendPost = props.sendPost
+    const sendUser = props.sendUser
+    const user = props.user
     const data = props.data
     const avatar = data.userID.avatar.data
     const userName = data.userID.userName
@@ -20,6 +25,75 @@ export default function PostFormat(props){
     const postID = data._id
     const likeNum = data.like
     const commentNum = data.comments.length
+    const allowed = data.allowed
+
+    const toLike = (e) => {
+        e.stopPropagation();
+        setLikeLoading(true)
+        if (!allowed){
+            message.error('Waiting for moderator allow')
+            setLikeLoading(false)
+            return 
+        }
+
+        if (user !== undefined){
+            if (ifLike()){
+                Get('/post/cancel_like?postid=' + postID)
+                .then(a => {
+                    var post_c = {...data}
+                    post_c.like = post_c.like - 1
+                    var user_c = {...user}
+                    var likes = user.likes
+                    likes.splice(likes.indexOf(postID), 1)
+                    user_c.likes = likes
+                    sendUser(user_c)
+                    sendPost(post_c)
+                    setLikeLoading(false)
+                }).catch(err =>message.error(err))
+            }
+            else{
+                Get('/post/like_post?postid=' + postID)
+                .then(a => {
+                    var post_c = {...data}
+                    post_c.like = post_c.like + 1
+                    var user_c = {...user}
+                    var likes = user.likes
+                    likes.push(postID)
+                    user_c.likes = likes
+                    sendUser(user_c)
+                    sendPost(post_c)
+                    setLikeLoading(false)
+                }).catch(err =>message.error(err))
+            }
+        }
+        else {
+            message.error('Please Login')
+            setLikeLoading(false)
+        }
+    }
+
+    const pendingAlert = () => {
+        if (!allowed){
+            return (
+                <Alert message="Pending..." type="warning" showIcon style={{width: '113px', backgroundColor: 'white', border: '0'}}/>
+            )
+        }
+    }
+    
+    const ifLike= () => {
+        if (user === undefined || !user.likes.includes(postID)){
+            return false
+        }
+
+        return true
+    }
+
+    const likeColor = () => {
+        if (ifLike()){
+            return "#eb2f96"
+        }
+        return 'rgb(171 168 168)'
+    }
 
 
     const getSelected = () => {
@@ -40,13 +114,12 @@ export default function PostFormat(props){
         if (getSelected()){
             
         }
+        else if (!allowed){
+            message.error('Waiting for moderator allow')
+        }
         else{
             props.navigation('/detail?id=' + postID)
         }
-    }
-
-    const toLike = (e) => {
-        e.stopPropagation();
     }
 
 
@@ -70,10 +143,12 @@ export default function PostFormat(props){
                         </Paragraph>
                     </Col>
                 </Row>
+                {pendingAlert()}
                 <Row style={{width: '100%', paddingBottom: '4px'}} justify="space-evenly" align="middle">
                     <Col>
                         <span>
-                            <Button shape='circle' icon={<HeartTwoTone twoToneColor={'rgb(171 168 168)'}/>} type='text' onClick={e=>toLike(e)}/>
+                            <Button shape='circle' icon={<HeartTwoTone twoToneColor={likeColor()}/>} type='text' onClick={e=>toLike(e)} 
+                                loading={likeLoading}/>
                         </span>
                         <Text type='secondary' style={{marginLeft: '10px'}}>
                             {likeNum}

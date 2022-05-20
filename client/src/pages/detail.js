@@ -1,10 +1,10 @@
 import React from 'react';
-import {Row, Col, Layout, Divider, Space, Spin, message, Typography} from 'antd';
+import {Row, Col, Layout, Divider, Space, Spin, Typography} from 'antd';
 import MenuBar from '../component/menubar.js'
 import DetailContent from '../component/detailContent.js'
 import '../css/App.css'
 import {Get} from '../common/request.js'
-import {useNavigate, useLocation } from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 
 class PostDetailPage extends React.Component{
     constructor(props){
@@ -27,6 +27,9 @@ class PostDetailPage extends React.Component{
         Get('/post/select?postid=' + id)
         .then(data => {
             this.setState({post: data.post})
+            if (!data.post.allowed){
+               this.props.navigation('/post')
+            }
             this.setState({comments: data.comments})
         })
         .catch(error => {
@@ -91,9 +94,7 @@ class PostDetailPage extends React.Component{
 
 // Wrap and export
 export default function PostDetail(props) {
-    
-    const location = useLocation()
-    
+        
     const GetQueryString = (name) => {
         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
         var r = window.location.search.substr(1).match(reg);

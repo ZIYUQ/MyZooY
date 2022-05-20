@@ -2,7 +2,7 @@ import React from 'react';
 import {Spin, Divider, List} from 'antd';
 import '../css/App.css'
 
-import PostFormat from './postFormat.js';
+import ModPostFormat from './modPostFormat.js';
 
 
 export default function ProfileContent(props){
@@ -22,10 +22,10 @@ export default function ProfileContent(props){
                 dataSource={posts}
                 renderItem={item => (
                     <div>
-                        <PostFormat data={item} navigation={props.navigation} user={props.user} 
+                        <ModPostFormat data={item} navigation={props.navigation}
                         sendPost={props.sendPost}
                         sendUser={props.sendUser}>
-                        </PostFormat>
+                        </ModPostFormat>
                         <Divider style={{width: '100%', margin: '0 0'}}></Divider>
                     </div>
                 )}/>

@@ -6,6 +6,10 @@ import Login from './pages/login.js';
 import Profile from './pages/profile.js'
 import Post from './pages/post.js'
 import Detail from './pages/detail.js'
+import ModeratorLogin from './pages/moderatorLogin.js'
+import ModeratorPost from './pages/modPost.js'
+import ModeratorUser from './pages/modUser.js'
+
 
 // router switch 
 class Router extends React.Component {
@@ -19,6 +23,9 @@ class Router extends React.Component {
                     <Route path='/profile' element={<Profile />}></Route>
                     <Route path='/post' element={<Post />}></Route>
                     <Route path='/detail' element={<Detail />}></Route>
+                    <Route path='/modlogin' element={<ModeratorLogin />}></Route>
+                    <Route path='/mod/post' element={<ModeratorPost />}></Route>
+                    <Route path='/mod/user' element={<ModeratorUser />}></Route>
                 </Routes>
             </BrowserRouter>
         )

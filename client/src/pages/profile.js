@@ -5,19 +5,27 @@ import ProfileContent from '../component/profileContent.js'
 import '../css/App.css'
 import {Get} from '../common/request.js'
 import {useNavigate} from 'react-router-dom'
+import PostContent from '../component/postContent.js'
+ 
+
 
 class ProfilePage extends React.Component{
     constructor(props){
         super(props);
-        this.state={loading: true, user: undefined}
+        this.state={loading: true, user: undefined, posts: undefined}
     }
 
     componentDidMount() {
         Get('/getuserinfo')
         .then(data => {
             this.setState({user: data.user})
+            var posts = data.user.posts.reverse()
+            posts.map(post => {
+                post.userID = {...data.user}
+                return post
+            })
+            this.setState({posts: posts})
             this.setState({loading: false})
-            console.log(this.state.user)
         })
         .catch(error => {
             message.error(error.message)
@@ -28,8 +36,20 @@ class ProfilePage extends React.Component{
     render(){
         const navigation = this.props.navigation
         const {Title} = Typography
+
         const changeUserInfo =(newUser)=>{
             this.setState({user: newUser})
+        }
+
+        const sendPost = (post_c) => {
+            var posts_c = this.state.posts
+            for (var i = 0; i < posts_c.length; i ++){
+                if (posts_c[i]._id === post_c._id){
+                    posts_c[i] = post_c
+                    break
+                }
+            }
+            this.setState({posts: posts_c})
         }
 
         if (this.state.loading) {
@@ -59,7 +79,9 @@ class ProfilePage extends React.Component{
                                 <ProfileContent data={this.state.user} 
                                     navigation={navigation}
                                     changeUserInfo ={changeUserInfo}></ProfileContent>
-                                <Divider style={{width: '100%'}}></Divider>
+                                <Divider style={{width: '100%', margin:'20px 0 0 0'}}></Divider>
+                                <PostContent posts={this.state.posts} navigation={navigation} user={this.state.user} 
+                               sendPost={sendPost} sendUser ={changeUserInfo}></PostContent>
                             </div>
                         </Col>
                         <div>

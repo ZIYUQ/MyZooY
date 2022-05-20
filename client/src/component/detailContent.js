@@ -76,11 +76,11 @@ export default function DetialContent(props){
     }
 
     const ifLike= () => {
-        if (user.likes.includes(postID) || user === undefined){
-            return true
+        if (!user.likes.includes(postID) || user === undefined){
+            return false
         }
 
-        return false
+        return true
     }
 
     const likeColor = () => {
@@ -90,6 +90,11 @@ export default function DetialContent(props){
         return 'rgb(171 168 168)'
     }
 
+    const onComment = () => {
+        if (user === undefined){
+            message.error('Please Login')
+        }
+    }
 
     const toComment = () => {
         setCommentLoading(true)
@@ -157,7 +162,7 @@ export default function DetialContent(props){
                 <Col>
                     <span>
                         <Button shape='circle' icon={<HeartTwoTone twoToneColor={likeColor()}/>} type='text' 
-                        onClick={e=>toLike(e)} loading={likeloading}/>
+                        onClick={e=>toLike()} loading={likeloading}/>
                     </span>
                     <Text type='secondary' style={{marginLeft: '10px'}}>
                         {likeNum}
@@ -165,7 +170,7 @@ export default function DetialContent(props){
                 </Col>
                 <Col>
                     <span>
-                        <Button shape='circle' icon={<MessageTwoTone twoToneColor={'rgb(171 168 168)'}/>} type='text'/>
+                        <Button shape='circle' icon={<MessageTwoTone twoToneColor={'rgb(171 168 168)'}/>} type='text' onClick={onComment}/>
                     </span>
                     <Text type='secondary' style={{marginLeft: '10px'}}>
                         {commentNum}

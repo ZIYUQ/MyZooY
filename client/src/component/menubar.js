@@ -1,14 +1,50 @@
-import React from 'react';
-import { Typography, Button, Row, Col } from 'antd';
+import React, {useState}from 'react';
+import { Typography, Button, Row, Col, Modal, Input, message} from 'antd';
 import { BookOutlined, LoginOutlined, AuditOutlined, LogoutOutlined} from '@ant-design/icons';
 import { Link } from "react-router-dom";
 import PFP from './pfp.js'
 import Cookies from 'js-cookie'
+import Post from '../common/request.js'
 
 export default function MenuBar(props){
-    const {Text} = Typography
+    const {Text, Title} = Typography
     const user = props.user
-    
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [btnloading, setbtnLoading] = useState(false)
+    const [confirmLoading, setConfirmLoading] = useState(false);
+    const [content, setContent] = useState('');
+    const [title, setTitle] = useState('');
+
+
+    const handleCancel = () => {
+        setIsModalVisible(false);
+        setbtnLoading(false)
+    };
+
+    const onWriring =() => {
+        setIsModalVisible(true)
+        setbtnLoading(true)
+    }
+
+    const writePost = () => {
+        setConfirmLoading(true)
+        if (content !== '' && title !== ''){
+            const req = {
+                title: title,
+                content: content
+            }
+            Post(req, '/post/create')
+            .then(data => {
+                props.navigation(0)
+            })
+            .catch(error => message.error(error))
+        }
+        else{
+            message.error('Please Fill the post')
+        }
+        
+    }
+
     const toProfile = () => {
         props.navigation('/profile')
     }
@@ -81,12 +117,12 @@ export default function MenuBar(props){
                 </div>
 
                 <div style={{height: '70px', width:'100%', padding: '10px 15px'}}>
-                    <Link to={'/login'}>
-                        <Button shape="round" icon={<LoginOutlined /> } size='large' type="text" style={{height: '60px', width:'100%', 
-                            fontSize:'18px', textAlign:'left'}}>
-                            Write Post
-                        </Button>
-                    </Link>
+
+                    <Button shape="round" icon={<LoginOutlined /> } size='large' type="text" style={{height: '60px', width:'100%', 
+                        fontSize:'18px', textAlign:'left'}} onClick={e=>onWriring()} loading={btnloading}>
+                        Write Post
+                    </Button>
+
                 </div>
 
                 <div style={{height: '70px', width:'100%', padding: '10px 15px'}}>
@@ -112,6 +148,27 @@ export default function MenuBar(props){
                             </Row>
                     </Button>
                 </div>
+                <Modal title="Write Post" centered={true} visible={isModalVisible} confirmLoading={confirmLoading} 
+                            onOk={writePost} onCancel={handleCancel}>
+                    <Row align="middle" style={{width: '100%'}}>
+                        <Col span={4}>
+                            <Title level={5} style={{marginBottom: '0'}}>Title: </Title>
+                        </Col>
+                        <Col span={18}>
+                            <Input.TextArea  prefix={<Text>Title: </Text>} autoSize={true} placeholder='Title' 
+                            onChange={e=>setTitle(e.target.value)}/>
+                        </Col>
+                    </Row>
+                    <Row align="middle" style={{width: '100%', paddingTop: '20px'}}>
+                        <Col span={4}>
+                            <Title level={5} style={{marginBottom: '0'}}>Content: </Title>
+                        </Col>
+                        <Col span={18}>
+                            <Input.TextArea autoSize={{ minRows: 4, maxRows: 10 }} prefix={<Text>Title: </Text>} placeholder='Title' 
+                            onChange={e=>setContent(e.target.value)}/>
+                        </Col>
+                    </Row>
+                </Modal>
             </div>
         )
     }
