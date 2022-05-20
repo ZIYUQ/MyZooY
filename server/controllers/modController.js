@@ -96,4 +96,14 @@ const RejectPost = async (req, res) => {
     }
 }
 
-module.exports = { ViewUsers, BanUser, ViewPosts, AllowPost, RejectPost, ModLogin, ModSignup }
+const UnbanUser = async (req, res) => {
+    try {
+        await User.updateOne({ _id: req.query.userid }, { $set: { ban: false } })
+        return res.status(200).json({ data: "Success" })
+    }
+    catch (err) {
+        return res.status(400).json({ error: "Bad Request" })
+    }
+}
+
+module.exports = { ViewUsers, BanUser, ViewPosts, AllowPost, RejectPost, ModLogin, ModSignup, UnbanUser }

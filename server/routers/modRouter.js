@@ -22,4 +22,6 @@ modRouter.get('/reject?',
 modRouter.get('/ban?',
     passport.authenticate('mod_jwt', { session: false }), (req, res) => modController.BanUser(req, res))
 
+modRouter.get('/unban?',
+    passport.authenticate('mod_jwt', { session: false }), (req, res) => modController.BanUser(req, res))
 module.exports = modRouter;
