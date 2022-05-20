@@ -5,17 +5,17 @@ const profileRouter = express.Router()
 const passport = require('passport')
 
 profileRouter.post('/update/age',
-    passport.authenticate('jwt', { session: false }), (req, res) => profileController.UpdateAge(req, res))
+    passport.authenticate('user_jwt', { session: false }), (req, res) => profileController.UpdateAge(req, res))
 
 profileRouter.post('/update/location',
-    passport.authenticate('jwt', { session: false }), (req, res) => profileController.UpdateLocation(req, res))
+    passport.authenticate('usr_jwt', { session: false }), (req, res) => profileController.UpdateLocation(req, res))
 
 profileRouter.post('/update/gender',
-    passport.authenticate('jwt', { session: false }), (req, res) => profileController.UpdateGender(req, res))
+    passport.authenticate('user_jwt', { session: false }), (req, res) => profileController.UpdateGender(req, res))
 
 profileRouter.post('/update/avatar',
-    passport.authenticate('jwt', { session: false }), (req, res) => profileController.UpdateAvatar(req, res))
+    passport.authenticate('user_jwt', { session: false }), (req, res) => profileController.UpdateAvatar(req, res))
 
 profileRouter.post('/update/all',
-    passport.authenticate('jwt', { session: false }), (req, res) => profileController.UpdateAll(req, res))
+    passport.authenticate('user_jwt', { session: false }), (req, res) => profileController.UpdateAll(req, res))
 module.exports = profileRouter

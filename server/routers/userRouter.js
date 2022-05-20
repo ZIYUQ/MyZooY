@@ -14,5 +14,5 @@ userRouter.post('/register/verification', userController.UserSignUpVerification)
 //    passport.authenticate('jwt', { session: false }), (req, res) => postController.NewPost(req, res))
 
 userRouter.get('/getuserinfo',
-    passport.authenticate('jwt', { session: false }), (req, res) => userController.UserInfo(req, res))
+    passport.authenticate('user_jwt', { session: false }), (req, res) => userController.UserInfo(req, res))
 module.exports = userRouter

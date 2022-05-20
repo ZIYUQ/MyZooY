@@ -21,7 +21,7 @@ module.exports = function (passport) {
         });
     });
 
-    passport.use('jwt', new JwtStrategy({
+    passport.use('user_jwt', new JwtStrategy({
         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), // client puts token in request header
         secretOrKey: process.env.JWT_PASSWORD, // the key that was used to sign the token
         passReqToCallback: true
@@ -35,6 +35,26 @@ module.exports = function (passport) {
             // if we found user, provide the user instance to passport
             if (user) {
                 return done(null, user);
+            } else { // otherwise assign false to indicate that authentication failed
+                return done(null, false);
+            }
+        });
+    }));
+
+    passport.use('mod_jwt', new JwtStrategy({
+        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), // client puts token in request header
+        secretOrKey: process.env.JWT_PASSWORD, // the key that was used to sign the token
+        passReqToCallback: true
+    }, (req, jwt_payload, done) => {
+        console.log(jwt_payload)
+        // passport will but the decrypted token in jwt_payload variable
+        Moderator.findOne({ '_id': jwt_payload.body._id }, (err, mod) => {
+            if (err) {
+                return done(err, false);
+            }
+            // if we found user, provide the user instance to passport
+            if (mod) {
+                return done(null, mod);
             } else { // otherwise assign false to indicate that authentication failed
                 return done(null, false);
             }
@@ -134,4 +154,73 @@ module.exports = function (passport) {
             })
         })
     }))
+
+    passport.use('local-mlogin', new LocalStrategy({
+        usernameField: 'emailAddress',
+        passwordField: 'password',
+    },
+        function (emailAddress, password, done) {
+            process.nextTick(function () {
+                // see if the user with the emailAddress exists
+                Moderator.findOne({ 'emailAddress': emailAddress }, function (err, mod) {
+                    // if there are errors, user is not found or password
+                    // does match, send back errors
+                    if (err) {
+                        return done(err, false, { message: "Database query failed" });
+                    } else if (!mod) {
+
+                        return done(null, false, { message: 'Email Address not registered' });
+                    } else if (!mod.validPassword(password)) {
+                        // false in done() indicates to the strategy that authentication has
+                        // failed
+                        return done(null, false, { message: 'Password incorrect' });
+                    }
+                    else {
+                        return done(null, mod);
+                    }
+                });
+            })
+
+        }));
+
+    passport.use('local-msignup', new LocalStrategy({
+        usernameField: 'emailAddress',     // get emailAddress and password
+        passwordField: 'password',
+        passReqToCallback: true    // pass req variables
+    }, function (req, emailAddress, password, done) {
+        process.nextTick(function () {
+            Moderator.findOne({ 'emailAddress': emailAddress }, function (err, existingMod) {
+                // search a user by the emailAddress
+                // authentication failure
+                if (err) {
+                    console.log(err)
+                    return done(err, false, { message: "Database query failed" });
+                } else {
+                    // If the emailAddress has already been used, send message and return false
+                    if (existingMod) {
+                        console.log("Customer signup failed:", emailAddress, "ALREADY REGISTERED!");
+                        return done(null, false, { message: "Email Address has already Registered" });
+                    }
+
+                    // If the information is not entered, will return with the wrong message
+
+                    else {
+
+                        let newMod = new Moderator();
+                        newMod.userName = req.body.userName
+                        newMod.emailAddress = emailAddress;
+                        newMod.password = newMod.generateHash(password);
+                        // and save the user
+                        newMod.save(function (err) {
+                            if (err)
+                                throw err;
+                            return done(null, newMod);
+                        })
+
+                    }
+                }
+            })
+        })
+    }))
 }
+
