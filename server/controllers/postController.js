@@ -38,7 +38,8 @@ const NewPost = async (req, res) => {
         newPost.allowed = false;
         newPost.comments = new Array();
         newPost.rejected = false;
-        await newPost.save();
+        let post = await newPost.save();
+        await User.updateOne({ _id: req.user._id }, { $push: { posts: post._id } })
         return res.status(200).json({ data: "Success" })
 
     } catch (err) {
