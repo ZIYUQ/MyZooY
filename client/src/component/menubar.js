@@ -35,11 +35,13 @@ export default function MenuBar(props){
             }
             Post(req, '/post/create')
             .then(data => {
+                handleCancel()
                 props.navigation('/profile')
             })
             .catch(error => message.error(error))
         }
         else{
+            setConfirmLoading(false)
             message.error('Please Fill the post')
         }
         

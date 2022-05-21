@@ -15,7 +15,7 @@ postRouter.get('/select?', postController.SinglePost)
 postRouter.get('/', postController.AllPost)
 
 postRouter.get('/like_post?',
-    passport.authenticate('jwt', { session: false }), (req, res) => postController.LikePost(req, res))
+    passport.authenticate('user_jwt', { session: false }), (req, res) => postController.LikePost(req, res))
 
 postRouter.get('/like_comment?',
     passport.authenticate('user_jwt', { session: false }), (req, res) => postController.LikeCommentPost(req, res))

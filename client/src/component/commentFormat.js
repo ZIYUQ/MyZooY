@@ -18,9 +18,7 @@ export default function CommentDetial(props){
 
     return(
 
-        <Button style={{height: 'auto', width: '100%', paddingTop: '15px', paddingLeft: '25px', 
-            textAlign: 'left', whiteSpace: 'pre-wrap', userSelect: 'text'}}
-            type="text">
+        <div style={{width: '100%', paddingTop: '15px', paddingLeft: '25px'}}>
             <Row style={{width: '100%'}}>
                 <Col>
                     <PFP avatar={{data: avatar, size: 48}}></PFP>
@@ -33,6 +31,6 @@ export default function CommentDetial(props){
                     </Paragraph>
                 </Col>
             </Row>
-        </Button>
+        </div>
     )
 }
