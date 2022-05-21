@@ -27,7 +27,7 @@ export default function DetialContent(props){
     const sendUser = props.sendUser
     const avatar = post.userID.avatar.data
     const userName = post.userID.userName
-    const date = new Date(post.updatedAt)
+    const date = new Date(post.createdAt)
     const dateString = (((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + 
         ((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + date.getFullYear())
     const timeString = date.getHours() + ':' + date.getMinutes()

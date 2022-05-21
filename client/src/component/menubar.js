@@ -128,8 +128,8 @@ export default function MenuBar(props){
                 </div>
 
                 <div style={{height: '70px', width:'100%', padding: '10px 15px'}}>
-                    <Button shape="round" size='large' type="text" style={{height: '80px', width:'100%', 
-                        textAlign:'left'}} onClick={() => toProfile()}>
+                    <Button shape="round" size='large' type="text" style={{height: 'auto', width:'100%', 
+                        textAlign:'left', whiteSpace: 'pre-wrap',}} onClick={() => toProfile()}>
                             <Row align='middle'>
                                 <Col>
                                     <PFP avatar={{data: user.avatar.data, size: 60}}></PFP>

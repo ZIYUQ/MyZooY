@@ -9,7 +9,7 @@ import Detail from './pages/detail.js'
 import ModeratorLogin from './pages/moderatorLogin.js'
 import ModeratorPost from './pages/modPost.js'
 import ModeratorUser from './pages/modUser.js'
-
+import CharacteristicPage from './pages/characteristic.js';
 
 // router switch 
 class Router extends React.Component {
@@ -18,6 +18,7 @@ class Router extends React.Component {
             <BrowserRouter>
                 <Routes>
                     <Route path='/' element={<HomePage />}></Route>
+                    <Route path='/characteristic' element={<CharacteristicPage />}></Route>
                     <Route path='/login' element={<Login />}></Route>
                     <Route path='/register' element={<Register />}></Route>
                     <Route path='/profile' element={<Profile />}></Route>

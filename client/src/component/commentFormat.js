@@ -1,5 +1,5 @@
 import React from 'react';
-import {Row, Col, Typography, Button, message} from 'antd';
+import {Row, Col, Typography} from 'antd';
 import '../css/App.css'
 import PFP from './pfp.js'
 
