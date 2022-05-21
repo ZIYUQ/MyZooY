@@ -18,8 +18,7 @@ Shenggang Qian1066266
 - Get Start
   - Tool list
 - Reposity Structure
-  - Web Access
-- Video Demonstration
+- Web Access
 
 ## Get Start
 #### Tool list
