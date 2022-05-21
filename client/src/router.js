@@ -23,7 +23,7 @@ class Router extends React.Component {
                     <Route path='/profile' element={<Profile />}></Route>
                     <Route path='/post' element={<Post />}></Route>
                     <Route path='/detail' element={<Detail />}></Route>
-                    <Route path='/modlogin' element={<ModeratorLogin />}></Route>
+                    <Route path='/mod/login' element={<ModeratorLogin />}></Route>
                     <Route path='/mod/post' element={<ModeratorPost />}></Route>
                     <Route path='/mod/user' element={<ModeratorUser />}></Route>
                 </Routes>

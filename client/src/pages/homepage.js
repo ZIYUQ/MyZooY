@@ -49,19 +49,6 @@ class HomePage extends React.Component{
                             </Row>
                     </Col>
                 </Row>
-                    {/* <div style={{height: '64px', width: '136px', marginRight: '50px', 
-                        marginLeft: '85%', marginTop:'50px'}}>
-                        <Button shape="round" icon={<BsFillDoorOpenFill/>} size={'large'} style={{
-                            backgroundColor: '#fff0',
-                            borderColor: '#504f4fbd',
-                            color: '#504f4fbd'}}>
-                            Enter ZooY
-                        </Button>
-                    </div>
-                    <div className="texty-demo" style={{paddingLeft:"7vw", paddingTop:"45vh", height:"30vh", width:"70vw"}}>
-                        <Texty style={{fontSize:"110px", color:"#524e529c", fontFamily:'Helvetica'}}>Zoo Y</Texty>
-                        <Texty style={{fontSize:"30px", color:"white", fontFamily:'Helvetica'}}> 1111</Texty>
-                    </div> */}
                 <Row align="middle" style={{height:'100vh'}}>
 
                     <Col span={11}>

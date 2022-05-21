@@ -71,7 +71,7 @@ const BanUser = async (req, res) => {
 
 const ViewPosts = async (req, res) => {
     try {
-        let posts = await Post.find({ allowed: false }).populate('userID').sort({ createdAt: 1 });
+        let posts = await Post.find({ allowed: false, rejected: false }).populate('userID').sort({ createdAt: 1 });
         return res.status(200).json({ data: "Success", posts: posts })
     } catch (error) {
         return res.status(400).json({ error: "Bad Request" })

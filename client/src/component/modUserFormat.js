@@ -8,9 +8,9 @@ import { modGet } from '../common/request';
 
 
 export default function ModUserFormat(props){
-    const {Title, Text, Paragraph } = Typography
+    const { Text } = Typography
     const [acceptLoading, setAcceptLoading] = useState(false)
-    const sendPost = props.sendPost
+    const sendUser = props.sendUser
     const data = props.data
     const avatar = data.avatar.data
     const userName = data.userName
@@ -21,16 +21,16 @@ export default function ModUserFormat(props){
         setAcceptLoading(true)
         modGet('/mod/ban?userid=' + userID)
         .then(data=>{
-            sendPost(userID)
+            sendUser(userID)
             setAcceptLoading(false)
         })
     }
 
     const Unban = () => {
         setAcceptLoading(true)
-        modGet('/mod/reject?postid=' + userID)
+        modGet('/mod/unban?userid=' + userID)
         .then(data=>{
-            sendPost(userID)
+            sendUser(userID)
             setAcceptLoading(false)
         })
     }

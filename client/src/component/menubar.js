@@ -35,7 +35,7 @@ export default function MenuBar(props){
             }
             Post(req, '/post/create')
             .then(data => {
-                props.navigation(0)
+                props.navigation('/profile')
             })
             .catch(error => message.error(error))
         }

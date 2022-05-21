@@ -26,6 +26,7 @@ export default function PostFormat(props){
     const likeNum = data.like
     const commentNum = data.comments.length
     const allowed = data.allowed
+    const rejected = data.rejected
 
     const toLike = (e) => {
         e.stopPropagation();
@@ -74,9 +75,16 @@ export default function PostFormat(props){
 
     const pendingAlert = () => {
         if (!allowed){
-            return (
-                <Alert message="Pending..." type="warning" showIcon style={{width: '113px', backgroundColor: 'white', border: '0'}}/>
-            )
+            if (rejected){
+                return (
+                    <Alert message="Reject" type="error" showIcon style={{width: '113px', border: '0'}}/>
+                )
+            }
+            else{
+                return (
+                    <Alert message="Pending..." type="warning" showIcon style={{width: '113px', border: '0'}}/>
+                )
+            }
         }
     }
     
