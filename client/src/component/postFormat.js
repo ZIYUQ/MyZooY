@@ -125,6 +125,9 @@ export default function PostFormat(props){
         else if (!allowed){
             message.error('Waiting for moderator allow')
         }
+        else if (rejected){
+            message.error('This post have been rejected')
+        }
         else{
             props.navigation('/detail?id=' + postID)
         }

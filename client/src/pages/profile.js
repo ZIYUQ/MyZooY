@@ -1,5 +1,5 @@
 import React from 'react';
-import {Row, Col, Layout, Divider, Space, Spin, message, Typography} from 'antd';
+import {Row, Col, Layout, Divider, Space, Spin, Typography} from 'antd';
 import MenuBar from '../component/menubar.js'
 import ProfileContent from '../component/profileContent.js'
 import '../css/App.css'
@@ -28,8 +28,7 @@ class ProfilePage extends React.Component{
             this.setState({loading: false})
         })
         .catch(error => {
-            message.error(error.message)
-            this.prop.navigation('/')
+            this.props.navigation('/post')
         })
     }
 

@@ -76,7 +76,7 @@ export default function DetialContent(props){
     }
 
     const ifLike= () => {
-        if (!user.likes.includes(postID) || user === undefined){
+        if (user === undefined || !user.likes.includes(postID)){
             return false
         }
 
