@@ -54,7 +54,7 @@ export default function MenuBar(props){
     const logout = (e) => {
         e.stopPropagation();
         Cookies.remove('token')
-        props.navigation('/post')
+        props.navigation(0)
     }
 
 
