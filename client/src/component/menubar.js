@@ -36,7 +36,7 @@ export default function MenuBar(props){
             Post(req, '/post/create')
             .then(data => {
                 handleCancel()
-                props.navigation('/profile')
+                props.navigation(0)
             })
             .catch(error => message.error(error))
         }
@@ -166,7 +166,7 @@ export default function MenuBar(props){
                             <Title level={5} style={{marginBottom: '0'}}>Content: </Title>
                         </Col>
                         <Col span={18}>
-                            <Input.TextArea autoSize={{ minRows: 4, maxRows: 10 }} prefix={<Text>Title: </Text>} placeholder='Title' 
+                            <Input.TextArea autoSize={{ minRows: 4, maxRows: 10 }} prefix={<Text>Title: </Text>} placeholder='Content' 
                             onChange={e=>setContent(e.target.value)}/>
                         </Col>
                     </Row>
